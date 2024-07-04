@@ -11,8 +11,12 @@ function Home() {
     return (
         <div className="app_home">
             <Header className="header" />
-            <BannerSection />
-            <NossaHistoria />
+            <div id="inicio">
+                <BannerSection />
+            </div>
+            <div id="nossahistoria">
+                <NossaHistoria />
+            </div>
             <Footer />
         </div>
     );

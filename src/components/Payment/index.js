@@ -3,6 +3,7 @@ import { Box, Typography, TextField, CssBaseline, Alert, Button, BottomNavigatio
 import { useNavigate } from 'react-router-dom';
 
 import { DataContext } from '../../context/DataContext';
+import PaymentBrick from "../MercadoPago";
 
 import axios from "axios";
 import "./style.css"
@@ -92,10 +93,8 @@ function Payment() {
                         <Typography variant="h5" sx={{ textAlign: "justify" }}>
                             Pagamento
                         </Typography>
-                        <Typography variant="body2" sx={{ textAlign: "justify" }}>
-                            Tira o Typography e coloca o CardEvent
-                        </Typography>
-                        {/* <CardEvent key={item.id} item={item} /> */}
+
+                        <CardEvent item={userData.evento} />
                     </Box>
                     <Box id="box_B">
                         <Box sx={{ pb: 7 }} ref={ref}>
@@ -116,9 +115,7 @@ function Payment() {
                             <form onSubmit={handleSubmit} style={{ width: "100%" }}>
                                 <Box sx={{ pt: 2 }}>
                                     {value === 0 && (
-                                        <Typography variant="body2" sx={{ textAlign: "justify" }}>
-                                            Informações sobre pagamento com Cartão.
-                                        </Typography>
+                                        <PaymentBrick />
                                     )}
                                     {(value === 1 || value === 2) && (
                                         <Box>
@@ -149,7 +146,7 @@ function Payment() {
                             </form>
 
                         </Box>
-                        <Box sx={{
+                        {value !== 0 && (<Box sx={{
                             display: "flex",
                             flexDirection: "row",
                             justifyContent: "flex-end",
@@ -167,7 +164,7 @@ function Payment() {
                             >
                                 Finalizar
                             </Button>
-                        </Box>
+                        </Box>)}
                     </Box>
                 </Box >
             )}

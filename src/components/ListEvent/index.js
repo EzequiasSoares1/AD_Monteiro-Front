@@ -1,68 +1,78 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Box, Skeleton, Typography, Button } from "@mui/material";
+import { useNavigate } from 'react-router-dom';
+
+import { DataContext } from '../../context/DataContext';
 
 import axios from "axios";
 
 import "./style.css"
 
-// convertendo data array USA para data brasileira
-
-function formatDate(dateArray) {
-  if (!Array.isArray(dateArray) || dateArray.length !== 3) {
-    return 'Data não definida';
-  }
-
-  const [year, month, day] = dateArray;
-  return `${day}/${month}/${year}`;
-};
-
-// card renderizado com informações da API
-
-const CardEvent = ({ item }) => (
-  <Box className="cardevento">
-
-    <Box className="imgcontainer">
-      <img className="imagem" src={`data:image/jpeg;base64, ${item.linkImgLogo}`} alt="imagem do evento" />
-    </Box>
-
-    <Typography variant="body2" className="valor">R$ {item.value}</Typography>
-
-    <Typography variant="h3" className="eventname">{item.name}</Typography>
-
-    <Typography variant="body2" className="description">{item.description}</Typography>
-
-    <Typography variant="body2" className="data">{formatDate(item.dateEvent)}</Typography>
-
-    <Box className="startend">
-      <Typography variant="body2" className="inicio">{formatDate(item.startRegistration)}</Typography>
-      <Typography variant="body2">ATÉ</Typography>
-      <Typography variant="body2" className="final">{formatDate(item.endRegistration)}</Typography>
-    </Box>
-    <Button
-      variant="contained"
-      className="enviar"
-      sx={{
-        marginBottom: '10px',
-        marginTop: '10px'
-      }}
-      onClick={() => {
-        alert('inscrever-se');
-      }}
-      type="submit"
-    >
-      Inscrever-se
-    </Button>
-  </Box>
-);
-
 // função de busca e armazenamendo de dados da API
-
 const ListEvent = () => {
+
+  const { userData, setUserData } = useContext(DataContext);
+  const navigate = useNavigate();
 
 
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const handleSubmit = (evento) => {
+    setUserData({
+      evento: evento,
+      dados: userData.dados,
+      pagamento: userData.pagamento
+    })
+    navigate('/inscricao');
+  }
+
+  // convertendo data array USA para data brasileira
+  function formatDate(dateArray) {
+    if (!Array.isArray(dateArray) || dateArray.length !== 3) {
+      return 'Data não definida';
+    }
+
+    const [year, month, day] = dateArray;
+    return `${day}/${month}/${year}`;
+  };
+
+  // card renderizado com informações da API
+  const CardEvent = ({ item }) => (
+    <Box className="cardevento">
+
+      <Box className="imgcontainer">
+        <img className="imagem" src={`data:image/jpeg;base64, ${item.linkImgLogo}`} alt="imagem do evento" />
+      </Box>
+
+      <Typography variant="body2" className="valor">R$ {item.value}</Typography>
+
+      <Typography variant="h3" className="eventname">{item.name}</Typography>
+
+      <Typography variant="body2" className="description">{item.description}</Typography>
+
+      <Typography variant="body2" className="data">{formatDate(item.dateEvent)}</Typography>
+
+      <Box className="startend">
+        <Typography variant="body2" className="inicio">{formatDate(item.startRegistration)}</Typography>
+        <Typography variant="body2">ATÉ</Typography>
+        <Typography variant="body2" className="final">{formatDate(item.endRegistration)}</Typography>
+      </Box>
+      <Button
+        variant="contained"
+        className="enviar"
+        sx={{
+          marginBottom: '10px',
+          marginTop: '10px'
+        }}
+        onClick={() => handleSubmit(item)}
+        type="submit"
+      >
+        Inscrever-se
+      </Button>
+    </Box>
+  );
 
 
   useEffect(() => {
@@ -82,13 +92,19 @@ const ListEvent = () => {
 
     apiResponse();
 
+    setUserData({
+      evento: null,
+      dados: null,
+      pagamento: null
+    })
+
   }, []);
 
 
   return (
     <Box className="main">
       <Box className="pagname">
-        <Typography variant="h1">Eventos</Typography>
+        <Typography variant="h3">Eventos</Typography>
       </Box>
       <Box className="listview">
 

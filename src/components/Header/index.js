@@ -41,12 +41,19 @@ function Header() {
         setMobileOpen((prevState) => !prevState);
     };
 
+    const scrollToSection = (id) => {
+        const section = document.getElementById(id);
+        if (section) {
+            section.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
     const drawer = (
         <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
             <List>
                 {navItems.map((item) => (
                     <ListItem key={item.nome} disablePadding >
-                        <ListItemButton href={`${item.link}`} >
+                        <ListItemButton onClick={() => scrollToSection(item.link)} >
                             <ListItemText primary={item.nome} />
                         </ListItemButton>
                     </ListItem>
@@ -71,7 +78,14 @@ function Header() {
                             sx={{ display: { xs: 'none', sm: 'block' } }}
                         >
                             {navItems.map((item) => (
-                                <NavLink to={`/${item.link}`} underline='none' color="inherit" className='link-app-bar'>{item.nome}</NavLink>
+                                <NavLink to={["inicio", "eventos"].includes(item.link) ? `/${item.link}` : ""}
+                                    underline='none'
+                                    color="inherit"
+                                    className='link-app-bar'
+                                    onClick={() => scrollToSection(item.link)}
+                                >
+                                    {item.nome}
+                                </NavLink>
                             ))}
                         </Box>
                         <IconButton

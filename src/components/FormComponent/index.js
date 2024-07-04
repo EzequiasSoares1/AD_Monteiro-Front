@@ -99,10 +99,7 @@ function FormComponent() {
                         <Typography variant="h5" sx={{ textAlign: "justify" }}>
                             Dados Pessoais
                         </Typography>
-                        <Typography variant="body2" sx={{ textAlign: "justify" }}>
-                            Tira o Typography e coloca o CardEvent
-                        </Typography>
-                        {/* <CardEvent key={item.id} item={item} /> */}
+                        <CardEvent item={userData.evento} />
                     </Box>
                     <Box id="box_B">
                         <form style={{ width: "100%" }}>
