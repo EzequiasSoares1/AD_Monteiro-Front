@@ -1,7 +1,8 @@
-body{
+body {
     color: black;
 }
-.main{
+
+.main {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -17,6 +18,7 @@ body{
     color: #262525;
     margin-top: 130px;
 }
+
 .pagname h1 {
     color: #262525;
 }
@@ -30,7 +32,8 @@ body{
 
 
 }
-.cardevento:hover{
+
+.cardevento:hover {
     transform: scale(1.03);
 }
 
@@ -46,8 +49,8 @@ body{
     padding: 0px 0px 10px 0px;
     gap: 10px;
     transition: all 0.3s;
-    cursor: pointer;
 }
+
 .imgcontainer {
     display: flex;
     align-items: center;
@@ -55,8 +58,8 @@ body{
     width: 100%;
     height: 40%;
     background-color: #fcfcfcf3;
-    background-image: url("../assets/banner.jpg");
-    background-size: cover ;
+    background-image: url("../../assets/banner.jpg");
+    background-size: cover;
     background-position: center;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
@@ -69,19 +72,17 @@ body{
     color: #262525;
 
 }
+
 .valor {
     font-size: 1rem;
 }
+
 .enviar {
-    width: 90%;
-    height: 40px;
-    border: none;
-    background-color: #2196F3;
-    border-radius: 8px;
-    cursor: pointer;
-}
-.enviar:disabled{
-    background-color: #2195f357;
+    width: 80%;
+    height: 40px !important;
+    background-color: #2196F3 !important;
+    box-shadow: none !important;
+    border-radius: 8px !important;
 }
 
 .description {
@@ -90,13 +91,18 @@ body{
     text-align: center;
     text-transform: lowercase;
 }
+
 .startend p {
     font-size: 0.8rem;
 }
+
 .startend {
     display: flex;
     gap: 5px;
 }
-.cardevento p, h1{
+
+.cardevento p,
+h1,
+h3 {
     color: #262525;
 }

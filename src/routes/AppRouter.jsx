@@ -6,11 +6,11 @@ import PaymentMethod from '../pages/PaymentMethod';
 import Inscription from "../pages/Inscription"
 
 const AppRouter = () => {
-    return(
+    return (
         <Router>
             <Routes>
                 <Route exact path="/inicio" Component={Home} />
-                <Route path="/eventos" Component={EventList}/>
+                <Route path="/eventos" Component={EventList} />
                 <Route path="/pagamento" Component={PaymentMethod} />
                 <Route path="/inscricao" Component={Inscription} />
             </Routes>

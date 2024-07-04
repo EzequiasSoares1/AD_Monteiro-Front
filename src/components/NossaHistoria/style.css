@@ -2,7 +2,7 @@
 
 * {
     font-family: Urbanist, sans-serif;
-    color: white;   
+    /* color: white; */
     padding: 0;
     margin: 0;
     box-sizing: border-boxs;
@@ -10,11 +10,11 @@
 }
 
 .ns-section {
-    background-image: url(../assets/bg-ns.png);
+    background-image: url(../../assets/bg-ns.png);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    width: 100vw;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -30,10 +30,12 @@
     flex-direction: column;
     gap: 40px;
 }
+
 .ns-title h1 {
     font-size: 30px;
     font-weight: 400;
 }
+
 .ns-contain {
     width: 100%;
     display: flex;
@@ -41,8 +43,9 @@
     align-items: center;
     padding: 0px 20px;
     margin-bottom: 20px;
-    
+
 }
+
 .image img {
     width: 110%;
 }
@@ -62,45 +65,53 @@
     font-size: 60px;
     font-weight: 500;
 }
+
 .text p {
     font-family: 14px;
     font-weight: 300;
 }
+
 .ns-line {
     display: flex;
     justify-content: center;
 }
 
-.ns-line  img{
+.ns-line img {
     width: 60%;
 }
+
 @media screen and (max-width: 1000px) {
     .image {
-       display: flex;
-       justify-content: center;
+        display: flex;
+        justify-content: center;
     }
+
     .image img {
         width: 80%;
     }
+
     .ns-contain {
         flex-direction: column;
         gap: 30px;
         justify-content: center;
         margin-top: 20px;
     }
+
     .text {
         width: 90%;
-    
+
     }
+
     .ns-line img {
         width: 80%;
     }
 }
 
 @media screen and (max-width: 650px) {
-    .ns-section{ 
-        background-position: 30% ;
+    .ns-section {
+        background-position: 30%;
     }
+
     .ns-contain {
         margin-bottom: 10px;
     }

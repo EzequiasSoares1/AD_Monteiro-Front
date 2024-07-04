@@ -1,4 +1,9 @@
-.header {
+/* .header {
+
     position: fixed;
     box-shadow: 0px 10px 100px rgba(0, 0, 0, 0.185)
+} */
+
+.app_home {
+    width: 100%;
 }

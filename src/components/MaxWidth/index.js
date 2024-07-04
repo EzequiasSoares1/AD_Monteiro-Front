@@ -1,20 +1,20 @@
 import React from "react";
 
 
-const MaxWidth = (props) => {
-  
+function MaxWidth() {
+
     const props = {
         sm: 340,
-        lg:  880,
+        lg: 880,
         xl: 1920,
     }
 
-    return(
+    return (
         <div className={props.xl} >
 
         </div>
     );
-    
+
 };
 
 export default MaxWidth;
