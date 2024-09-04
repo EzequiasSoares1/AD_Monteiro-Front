@@ -67,13 +67,12 @@ function Header() {
             <Box sx={{ display: 'flex' }}>
                 <AppBar component="nav" className="nav_bar">
                     <Toolbar>
-                        <Typography
-                            variant="h6"
+                        <Box
                             component="div"
                             sx={{ flexGrow: 1 }}
                         >
                             <img src={Logo} alt="Logo Assembléia de Deus Monteiro" className="logo" />
-                        </Typography>
+                        </Box>
                         <Box
                             sx={{ display: { xs: 'none', sm: 'block' } }}
                         >

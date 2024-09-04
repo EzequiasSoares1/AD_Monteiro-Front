@@ -1,15 +1,15 @@
 import React from "react";
+import { Box } from "@mui/material";
+
 import Header from "../../components/Header";
 import FormComponent from "../../components/FormComponent";
 
 function Inscription() {
     return (
-        <div className="inscription">
+        <Box sx={{ marginTop: "0px" }}>
             <Header />
             <FormComponent />
-        </div>
-
-
+        </Box>
     );
 }
 

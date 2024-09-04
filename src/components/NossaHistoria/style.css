@@ -2,23 +2,33 @@
 
 * {
     font-family: Urbanist, sans-serif;
-    /* color: white; */
     padding: 0;
     margin: 0;
     box-sizing: border-boxs;
 
 }
 
+.texto-historia {
+    color: #686868;
+}
+
+.texto-historia-principal {
+    color: #686868;
+    /* border: 2px solid #686868;
+    border-radius: 30px;
+    padding: 10px; */
+}
+
 .ns-section {
-    background-image: url(../../assets/bg-ns.png);
+    /* background-image: url(../../assets/bg-ns.png);
     background-size: cover;
     background-repeat: no-repeat;
-    background-position: center;
-    width: 100%;
+    background-position: center; */
+    /* width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    flex-direction: column;
+    flex-direction: column;*/
     padding: 40px 0px;
 }
 
@@ -78,6 +88,10 @@
 
 .ns-line img {
     width: 60%;
+}
+
+.ns-line-color {
+    color: blue;
 }
 
 @media screen and (max-width: 1000px) {

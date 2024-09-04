@@ -10,12 +10,18 @@ function Home() {
 
     return (
         <div className="app_home">
-            <Header className="header" />
+            <Header />
             <div id="inicio">
                 <BannerSection />
             </div>
             <div id="nossahistoria">
                 <NossaHistoria />
+            </div>
+            <div id="cultos">
+                Cultos
+            </div>
+            <div id="doacoes">
+                Doações
             </div>
             <Footer />
         </div>

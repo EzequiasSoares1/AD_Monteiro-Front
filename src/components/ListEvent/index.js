@@ -3,14 +3,13 @@ import { Box, Skeleton, Typography, Button } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 
 import { DataContext } from '../../context/DataContext';
-
-import axios from "axios";
+import Api from "../../services/Api";
 
 import "./style.css"
 
-// função de busca e armazenamendo de dados da API
 const ListEvent = () => {
 
+  // função de busca e armazenamendo de dados da API
   const { userData, setUserData } = useContext(DataContext);
   const navigate = useNavigate();
 
@@ -48,7 +47,7 @@ const ListEvent = () => {
 
       <Typography variant="body2" className="valor">R$ {item.value}</Typography>
 
-      <Typography variant="h3" className="eventname">{item.name}</Typography>
+      <Typography variant="body1" className="eventname">{item.name}</Typography>
 
       <Typography variant="body2" className="description">{item.description}</Typography>
 
@@ -79,7 +78,7 @@ const ListEvent = () => {
 
     const apiResponse = async () => {
       try {
-        const response = await axios.get('https://ad-monteiro-back.onrender.com/event/active');
+        const response = await Api.getEventActive();
         setData(response.data);
         setLoading(false);
 

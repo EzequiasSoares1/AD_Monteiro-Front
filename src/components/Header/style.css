@@ -6,15 +6,6 @@
 
 }
 
-/* .header-contain-max {
-    display: flex;
-    width: 100%;
-    height: 80px;
-    background-color: #f2f2f2;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0px 20px;
-} */
 
 .header {
     width: 100vw;
@@ -25,22 +16,15 @@
 }
 
 .logo {
-
-    width: 50px;
-
+    width: 50px !important;
 }
-
-/* nav {
-    display: flex;
-    gap: 20px;
-} */
 
 nav a {
     cursor: pointer;
     font-weight: 300;
     letter-spacing: 0.1cap;
     text-decoration: none;
-    color: black;
+    color: rgb(39, 39, 39);
     font-size: 13px;
 }
 
@@ -49,41 +33,10 @@ nav a {
 }
 
 .nav_bar {
-    background-color: #f2f2f2 !important;
-    /* background-color: rgba(0, 0, 0, 0.219) !important; */
+    background-color: rgb(255, 255, 255) !important;
     box-shadow: none !important;
 }
 
 .css-10hburv-MuiTypography-root {
     color: black;
 }
-
-/* .header-contain-media {
-    display: none;
-    width: 100%;
-    height: 80px;
-    background-color: #f2f2f2;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0px 20px;
-} */
-
-/* .max-width-header {
-    width: 100vw;
-} */
-
-/* @media screen and (max-width:680px) {
-    .header-contain-max {
-        display: none;
-    }
-
-    .header-contain-media {
-        display: flex;
-    }
-}
-
-@media screen and (min-width:1240px) {
-    .max-width-header {
-        width: 1240px;
-    }
-} */
