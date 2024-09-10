@@ -17,6 +17,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 import { DataContext } from '../../context/DataContext';
+import CardEvent from "../CardEvent";
 import PaymentBrick from "../PaymentBrick";
 import PaymentPix from "../PaymentPix";
 
@@ -28,7 +29,7 @@ function FormComponent() {
     const navigate = useNavigate();
 
     const [nome, setNome] = useState(userData.dados != null ? userData.dados.nome : "");
-    const [cpf, setCpf] = useState(userData.dados != null ? userData.dados.cpf : "");
+    const [telefoneEmergencia, setTelefoneEmergencia] = useState(userData.dados != null ? userData.dados.telefoneEmergencia : "");
     const [cidade, setCidade] = useState(userData.dados != null ? userData.dados.cidade : "");
     const [email, setEmail] = useState(userData.dados != null ? userData.dados.email : "");
     const [telefone, setTelefone] = useState(userData.dados != null ? userData.dados.telefone : "");
@@ -64,7 +65,7 @@ function FormComponent() {
 
         if (userData.evento !== null &&
             nome !== "" &&
-            cpf !== "" &&
+            telefoneEmergencia !== "" &&
             cidade !== "" &&
             email !== "" &&
             telefone !== "" &&
@@ -78,38 +79,6 @@ function FormComponent() {
             handleClickSnackBar("Insira todos os valores corretamente");
         }
     };
-
-    function formatDate(dateArray) {
-        if (!Array.isArray(dateArray) || dateArray.length !== 3) {
-            return 'Data não definida';
-        }
-
-        const [year, month, day] = dateArray;
-        return `${day}/${month}/${year}`;
-    };
-
-    const CardEvent = ({ item }) => (
-        <Box className="cardevento">
-
-            <Box className="imgcontainer">
-                <img className="imagem" src={`data:image/jpeg;base64, ${item.linkImgLogo}`} alt="imagem do evento" />
-            </Box>
-
-            <Typography variant="body2" className="valor">R$ {item.value}</Typography>
-
-            <Typography variant="body1" className="eventname">{item.name}</Typography>
-
-            <Typography variant="body2" className="description">{item.description}</Typography>
-
-            <Typography variant="body2" className="data">{formatDate(item.dateEvent)}</Typography>
-
-            <Box className="startend">
-                <Typography variant="body2" className="inicio">{formatDate(item.startRegistration)}</Typography>
-                <Typography variant="body2">ATÉ</Typography>
-                <Typography variant="body2" className="final">{formatDate(item.endRegistration)}</Typography>
-            </Box>
-        </Box>
-    );
 
     return (
 
@@ -152,7 +121,7 @@ function FormComponent() {
                         <Typography variant="h5" sx={{ marginBottom: "20px" }}>
                             Dados Inscrição
                         </Typography>
-                        <CardEvent item={userData.evento} />
+                        <CardEvent item={userData.evento} tipo="INSCRIPTION" />
                     </Box>
                     <Box
                         id="id-box-form"
@@ -174,13 +143,13 @@ function FormComponent() {
 
                             <TextField
                                 required
-                                id="txCPF"
+                                id="txTelefoneEmergencia"
                                 fullWidth
                                 variant="outlined"
-                                label="CPF"
-                                value={cpf}
+                                label="Telefone de emergência"
+                                value={telefoneEmergencia}
                                 sx={{ marginTop: "10px" }}
-                                onChange={(e) => setCpf(e.target.value)}
+                                onChange={(e) => setTelefoneEmergencia(e.target.value)}
                             ></TextField>
 
                             <TextField
