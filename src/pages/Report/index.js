@@ -11,7 +11,12 @@ import {
     createTheme,
     ThemeProvider,
     Snackbar,
-    Alert
+    Alert,
+    Table,
+    TableHead,
+    TableRow,
+    TableCell,
+    TableBody
 } from '@mui/material';
 
 import { DataContext } from '../../context/DataContext';
