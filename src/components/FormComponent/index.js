@@ -208,8 +208,8 @@ function FormComponent() {
                                         sx={{ width: "100%" }}
                                         onChange={(e) => setSexo(e.target.value)}
                                     >
-                                        <MenuItem value="MALE">Masculino</MenuItem>
-                                        <MenuItem value="FEMALE">Feminino</MenuItem>
+                                        <MenuItem value="MASCULINO">Masculino</MenuItem>
+                                        <MenuItem value="FEMININO">Feminino</MenuItem>
                                     </Select>
                                 </Box>
 
