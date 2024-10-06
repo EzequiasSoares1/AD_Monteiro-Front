@@ -15,6 +15,12 @@ export const getEventActive = async () => {
 
 };
 
+export const getReport = async (nameEvent) => {
+
+    return await api.get(`/reportsRootRestricts/${nameEvent}`);
+
+};
+
 export const postCreatePayment = async (paymentData) => {
     return await api.post("/createPay", paymentData);
 };
@@ -23,4 +29,5 @@ export default {
     login,
     getEventActive,
     postCreatePayment,
+    getReport,
 };

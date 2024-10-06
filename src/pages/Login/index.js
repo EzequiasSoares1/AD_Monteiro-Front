@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import StoreContext from "../../store/StoreContext";
 import {
     Button,
     CssBaseline,
@@ -27,6 +28,8 @@ function Login() {
     const [openSnackBar, setOpenSnackBar] = useState(false);
     const [mensagemSnackBar, setMensagemSnackBar] = useState(null);
 
+    const { setToken } = useContext(StoreContext);
+
     const navigate = useNavigate();
 
     const handleClickSnackBar = (mensagem) => {
@@ -46,7 +49,7 @@ function Login() {
         if (email.trim() !== "" && password.trim() !== "") {
             Api.login({ "email": email, "password": password })
                 .then((response) => {
-                    // setToken(response.data.token);
+                    setToken(response.data.token);
                     return navigate("/inicio");
                 })
                 .catch((error) => {

@@ -3,6 +3,7 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer"
 import BannerSection from "../../components/BannerSection";
 import NossaHistoria from "../../components/NossaHistoria";
+import Cults from "../../components/Cults";
 import "./style.css"
 
 
@@ -18,10 +19,10 @@ function Home() {
                 <NossaHistoria />
             </div>
             <div id="cultos">
-                Cultos
+                <Cults />
             </div>
             <div id="doacoes">
-                Doações
+                {/*aqui vem as doações*/}
             </div>
             <Footer />
         </div>

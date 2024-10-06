@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, IconButton } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
+import ReportIcon from '@mui/icons-material/Report';
 
 import { DataContext } from '../../context/DataContext';
+import StoreContext from "../../store/StoreContext";
 
 import "./style.css"
 
@@ -10,6 +12,8 @@ function CardEvent(props) {
 
     const { item, tipo } = props;
     const navigate = useNavigate();
+    const { token } = useContext(StoreContext);
+
     // função de busca e armazenamendo de dados da API
     const { userData, setUserData } = useContext(DataContext);
 
@@ -19,7 +23,12 @@ function CardEvent(props) {
             dados: userData.dados,
             pagamento: userData.pagamento
         })
-        navigate('/inscricao');
+
+        if (token === null) {
+            navigate('/inscricao');
+        } else {
+            navigate('/relatorio');
+        }
     }
 
     // convertendo data array USA para data brasileira
@@ -123,18 +132,30 @@ function CardEvent(props) {
             </Box>
 
             {tipo === "LIST" &&
-                <Button
-                    variant="contained"
-                    className="enviar"
-                    sx={{
-                        marginBottom: '10px',
-                        marginTop: '10px'
-                    }}
-                    onClick={() => handleSubmit(item)}
-                    type="submit"
-                >
-                    Inscrever-se
-                </Button>
+
+                (token === null ?
+                    <Button
+                        variant="contained"
+                        className="enviar"
+                        sx={{
+                            marginBottom: '10px',
+                            marginTop: '10px'
+                        }}
+                        onClick={() => handleSubmit(item)}
+                        type="submit"
+                    >
+                        Inscrever-se
+                    </Button>
+                    :
+                    <IconButton
+                        color="primary"
+                        onClick={() => handleSubmit(item)}
+                    >
+                        <ReportIcon />
+                    </IconButton>
+
+                )
+
             }
         </Box>
     );
