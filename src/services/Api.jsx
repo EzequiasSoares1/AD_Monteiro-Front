@@ -1,11 +1,37 @@
-import { Axios } from "axios";
-import React from "react"; 
+import axios from "axios";
 
-const API = async (event) => {
+const api = axios.create({
+    baseURL: "https://ad-monteiro-back.onrender.com",
+});
 
-    const response = await Axios.get('https://api.exemplo.com/dados');
-        console.log(response.data);
 
-}
+export const login = async (data) => {
+    return await api.post("/auth", data);
+};
 
-export default API;
+export const getEventActive = async () => {
+
+    return await api.get("/event/active");
+
+};
+
+export const getReport = async (nameEvent, token) => {
+
+    return await api.get(`/reportsRootRestricts/${nameEvent}`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+
+};
+
+export const postCreatePayment = async (paymentData) => {
+    return await api.post("/createPay", paymentData);
+};
+
+export default {
+    login,
+    getEventActive,
+    postCreatePayment,
+    getReport,
+};

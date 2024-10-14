@@ -1,0 +1,11 @@
+.enviar {
+    background-color: #2196F3 !important;
+    box-shadow: none !important;
+    border-radius: 8px !important;
+}
+
+.cancelar-voltar {
+    background-color: #acacac !important;
+    box-shadow: none !important;
+    border-radius: 8px !important;
+}

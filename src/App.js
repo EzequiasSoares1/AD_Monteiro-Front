@@ -1,13 +1,15 @@
-
-import './styles/index.css';
-import AppRouter from './router/AppRouter'
-import Home from './pages/Home.jsx';
+import './style.css';
+// import logo from './logo.svg';
+import AppRouter from './routes/AppRouter';
+import { DataProvider } from './context/DataContext';
+// import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <AppRouter/>
-
+      <DataProvider>
+        <AppRouter />
+      </DataProvider>
     </div>
   );
 }

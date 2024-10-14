@@ -1,0 +1,19 @@
+.enviar {
+    width: 80%;
+    height: 40px !important;
+    background-color: #2196F3 !important;
+    box-shadow: none !important;
+    border-radius: 8px !important;
+}
+
+.startend {
+    display: flex;
+    gap: 5px;
+}
+
+.description {
+    font-size: 0.7rem;
+    max-width: 80%;
+    text-align: center;
+    text-transform: lowercase;
+}
