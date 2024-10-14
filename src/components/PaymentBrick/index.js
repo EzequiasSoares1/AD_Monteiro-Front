@@ -6,7 +6,7 @@ import Api from "../../services/Api";
 
 function PaymentBrick(props) {
 
-    const { evento, nome, telefone, cidade, email, sexo, tamanho } = props;
+    const { evento, nome, telefone, cidade, email, sexo, tamanho, telefoneEmergencia } = props;
 
     const [preferenceID, setPreferenceID] = useState("");
 
@@ -42,6 +42,10 @@ function PaymentBrick(props) {
     const customization = {
         paymentMethods: {
             creditCard: "all",
+            installments: {
+                enabled: true, // Habilita a possibilidade de parcelas
+                options: [1, 2, 3, 4, 5, 6], // Define as opções de parcelas disponíveis
+            }
         },
     };
     const onSubmit = async (
@@ -56,6 +60,7 @@ function PaymentBrick(props) {
                         "name": nome,
                         "telephone": telefone,
                         "city": cidade,
+                        "emergencyContact": telefoneEmergencia,
                         "email": email,
                         "sex": sexo,
                         "shirtSize": tamanho,

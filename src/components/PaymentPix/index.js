@@ -19,7 +19,7 @@ import "./style.css";
 
 function PaymentPix(props) {
 
-    const { idEvento, nome, telefone, cidade, email, sexo, tamanho } = props;
+    const { idEvento, nome, telefone, cidade, email, sexo, tamanho, telefoneEmergencia } = props;
     const navigate = useNavigate();
 
     const [pixKey, setPixKey] = useState('');
@@ -52,6 +52,7 @@ function PaymentPix(props) {
                     "name": nome,
                     "telephone": telefone,
                     "city": cidade,
+                    "emergencyContact": telefoneEmergencia,
                     "email": email,
                     "sex": sexo,
                     "shirtSize": tamanho,
@@ -132,17 +133,6 @@ function PaymentPix(props) {
                 />
             )}
 
-            <Button
-                variant="contained"
-                className="enviar"
-                onClick={() => navigate("/eventos")}
-                sx={{
-                    marginBottom: '30px',
-                    maxWidth: "200px"
-                }}
-            >
-                Finalizar
-            </Button>
             <Snackbar
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                 open={openSnackBar}

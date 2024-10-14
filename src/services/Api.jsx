@@ -15,9 +15,13 @@ export const getEventActive = async () => {
 
 };
 
-export const getReport = async (nameEvent) => {
+export const getReport = async (nameEvent, token) => {
 
-    return await api.get(`/reportsRootRestricts/${nameEvent}`);
+    return await api.get(`/reportsRootRestricts/${nameEvent}`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
 
 };
 

@@ -66,7 +66,7 @@ function BannerSection({ interval = 5000 }) {
                 >
                     "União, Comunhão e Oração"
                 </Typography>
-                <Typography
+                {/* <Typography
                     sx={{
                         color: 'white',
                         position: 'absolute',
@@ -82,7 +82,7 @@ function BannerSection({ interval = 5000 }) {
                     }}
                 >
                     --- ESSE É O NOSSO LEMA ---
-                </Typography>
+                </Typography> */}
                 <Box
                     sx={{
                         color: 'white',

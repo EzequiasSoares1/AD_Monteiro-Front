@@ -1,13 +1,22 @@
-import React from "react";
-import { Box, Typography, AppBar, Toolbar, IconButton, Drawer, List, ListItem, ListItemButton, ListItemText } from "@mui/material";
+import React, { useContext } from "react";
+import { Box, Typography, AppBar, Toolbar, IconButton, Drawer, List, ListItem, ListItemButton, ListItemText, Button } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import { NavLink } from "react-router-dom";
 
 import Logo from "../../assets/logo.png"
 
+import StoreContext from "../../store/StoreContext";
+
 import "./style.css"
 
 function Header() {
+
+    const { token, setToken } = useContext(StoreContext);
+
+    const sair = () => {
+        setToken(null);
+        window.location.reload();
+    }
 
     const navItems = [
         {
@@ -36,6 +45,15 @@ function Header() {
 
         }
     ];
+
+    if (token !== null) {
+        navItems.push({
+            "nome": 'Sair',
+            "link": 'sair'
+        });
+    }
+
+
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const handleDrawerToggle = () => {
         setMobileOpen((prevState) => !prevState);
@@ -53,7 +71,7 @@ function Header() {
             <List>
                 {navItems.map((item) => (
                     <ListItem key={item.nome} disablePadding >
-                        <ListItemButton onClick={() => scrollToSection(item.link)} >
+                        <ListItemButton onClick={() => item.link === 'sair' ? sair() : scrollToSection(item.link)}>
                             <ListItemText primary={item.nome} />
                         </ListItemButton>
                     </ListItem>
@@ -77,11 +95,13 @@ function Header() {
                             sx={{ display: { xs: 'none', sm: 'block' } }}
                         >
                             {navItems.map((item) => (
-                                <NavLink to={["inicio", "eventos"].includes(item.link) ? `/${item.link}` : ""}
+                                <NavLink
+                                    key={item.nome}
+                                    to={["inicio", "eventos"].includes(item.link) ? `/${item.link}` : ""}
                                     underline='none'
                                     color="inherit"
                                     className='link-app-bar'
-                                    onClick={() => scrollToSection(item.link)}
+                                    onClick={() => item.link === 'sair' ? sair() : scrollToSection(item.link)}
                                 >
                                     {item.nome}
                                 </NavLink>

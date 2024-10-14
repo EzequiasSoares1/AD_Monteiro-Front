@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Box, Typography, Button, IconButton } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
-import ReportIcon from '@mui/icons-material/Report';
+import DescriptionIcon from '@mui/icons-material/Description';
+
 
 import { DataContext } from '../../context/DataContext';
 import StoreContext from "../../store/StoreContext";
@@ -133,28 +134,19 @@ function CardEvent(props) {
 
             {tipo === "LIST" &&
 
-                (token === null ?
-                    <Button
-                        variant="contained"
-                        className="enviar"
-                        sx={{
-                            marginBottom: '10px',
-                            marginTop: '10px'
-                        }}
-                        onClick={() => handleSubmit(item)}
-                        type="submit"
-                    >
-                        Inscrever-se
-                    </Button>
-                    :
-                    <IconButton
-                        color="primary"
-                        onClick={() => handleSubmit(item)}
-                    >
-                        <ReportIcon />
-                    </IconButton>
-
-                )
+                <Button
+                    endIcon={token !== null ? <DescriptionIcon /> : null}
+                    variant="contained"
+                    className="enviar"
+                    sx={{
+                        marginBottom: '10px',
+                        marginTop: '10px'
+                    }}
+                    onClick={() => handleSubmit(item)}
+                    type="submit"
+                >
+                    {token !== null ? "Relatório" : "Inscreva-se"}
+                </Button>
 
             }
         </Box>

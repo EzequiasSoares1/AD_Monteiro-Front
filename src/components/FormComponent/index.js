@@ -14,6 +14,8 @@ import {
     Snackbar,
     IconButton
 } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
+
 import { useNavigate } from 'react-router-dom';
 
 import { DataContext } from '../../context/DataContext';
@@ -143,13 +145,13 @@ function FormComponent() {
 
                             <TextField
                                 required
-                                id="txTelefoneEmergencia"
+                                id="txTelefone"
                                 fullWidth
                                 variant="outlined"
-                                label="Telefone de emergência"
-                                value={telefoneEmergencia}
+                                label="Telefone"
+                                value={telefone}
                                 sx={{ marginTop: "10px" }}
-                                onChange={(e) => setTelefoneEmergencia(e.target.value)}
+                                onChange={(e) => setTelefone(e.target.value)}
                             ></TextField>
 
                             <TextField
@@ -177,13 +179,13 @@ function FormComponent() {
 
                             <TextField
                                 required
-                                id="txTelefone"
+                                id="txTelefoneEmergencia"
                                 fullWidth
                                 variant="outlined"
-                                label="Telefone"
-                                value={telefone}
+                                label="Telefone de emergência"
+                                value={telefoneEmergencia}
                                 sx={{ marginTop: "10px" }}
-                                onChange={(e) => setTelefone(e.target.value)}
+                                onChange={(e) => setTelefoneEmergencia(e.target.value)}
                             ></TextField>
 
                             <Box sx={{
@@ -305,6 +307,18 @@ function FormComponent() {
                     >
                         <DialogTitle id="scroll-dialog-title">
                             Pagamento
+                            <IconButton
+                                aria-label="close"
+                                onClick={handleCloseDialog}
+                                sx={{
+                                    position: 'absolute',
+                                    right: 8,
+                                    top: 8,
+                                    color: (theme) => theme.palette.grey[500],
+                                }}
+                            >
+                                <CloseIcon />
+                            </IconButton>
                         </DialogTitle>
                         <DialogContent dividers={scroll === 'paper'}>
                             {formaPagamento === "pix" && (
@@ -316,6 +330,7 @@ function FormComponent() {
                                     email={email}
                                     sexo={sexo}
                                     tamanho={tamanhoCamisa}
+                                    telefoneEmergencia={telefoneEmergencia}
                                 />
                             )}
                             {formaPagamento === "cartao" && (
@@ -327,6 +342,7 @@ function FormComponent() {
                                     email={email}
                                     sexo={sexo}
                                     tamanho={tamanhoCamisa}
+                                    telefoneEmergencia={telefoneEmergencia}
                                 />
                             )}
                         </DialogContent>
