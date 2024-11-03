@@ -50,7 +50,7 @@ function Login() {
             Api.login({ "email": email, "password": password })
                 .then((response) => {
                     setToken(response.data.token);
-                    return navigate("/inicio");
+                    return navigate("/eventos");
                 })
                 .catch((error) => {
                     handleClickSnackBar(error.response.data)

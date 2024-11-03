@@ -1,15 +1,14 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
+import { useEffect, useState } from 'react';
+
 import { useNavigate } from 'react-router-dom';
 import StoreContext from "../../store/StoreContext";
 import {
     Button,
-    CssBaseline,
     TextField,
     Box,
     Typography,
     Container,
-    createTheme,
-    ThemeProvider,
     Snackbar,
     Alert,
     Table,
@@ -22,7 +21,7 @@ import {
 import { DataContext } from '../../context/DataContext';
 import Api from '../../services/Api';
 import Header from "../../components/Header";
-import "./style.css"
+import "./style.css";
 
 function Report() {
     const { token } = useContext(StoreContext);
@@ -30,12 +29,13 @@ function Report() {
     const [openSnackBar, setOpenSnackBar] = useState(false);
     const [mensagemSnackBar, setMensagemSnackBar] = useState(null);
     const [report, setReport] = useState(null);
-    const [isLoading, setIsLoading] = useState(true); // Novo estado para controlar o carregamento
+    const [isLoading, setIsLoading] = useState(true);
+    const [searchTerm, setSearchTerm] = useState('');
 
     const navigate = useNavigate();
 
     const handleClickSnackBar = (mensagem) => {
-        setMensagemSnackBar(mensagem)
+        setMensagemSnackBar(mensagem);
         setOpenSnackBar(true);
     };
 
@@ -45,24 +45,39 @@ function Report() {
         }
         setOpenSnackBar(false);
     };
-
+ 
     useEffect(() => {
-        if (userData.evento !== null) {
+        if (userData.evento != null) {
             Api.getReport(userData.evento.name, token)
                 .then((response) => {
                     setReport(response.data);
                 })
                 .catch((error) => {
-                    handleClickSnackBar(error.response.data)
+                    handleClickSnackBar(error.response.data);
                 })
                 .finally(() => {
-                    setIsLoading(false); // Define o carregamento como falso após a API retornar
+                    setIsLoading(false);
                 });
         } else {
-            handleClickSnackBar("Nenhum evento escolhido")
-            setIsLoading(false); // Se nenhum evento foi escolhido, paramos o carregamento
+            handleClickSnackBar("Nenhum evento escolhido");
+            setIsLoading(false);
         }
     }, [userData, token]);
+
+    const allData = report?.registered || [];
+    const sortedAllData = allData.sort((a, b) => a.name.localeCompare(b.name));
+
+    const filteredData = sortedAllData.filter(user => 
+        user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.city.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const nonFilteredData = sortedAllData.filter(user => 
+        !user.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        !user.city.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const finalData = [...filteredData, ...nonFilteredData];
 
     return (
         <Box
@@ -74,9 +89,18 @@ function Report() {
                 width: "100%",
             }}
         >
-            {isLoading ? ( // Mostra o indicador de carregamento enquanto os dados estão sendo buscados
+             {isLoading ? (
+            <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '100vh', 
+                }}
+            >
                 <CircularProgress />
-            ) : (
+            </Box>
+        ) : (
                 <>
                     {userData.evento === null && report && (
                         <Alert severity="success">
@@ -84,17 +108,18 @@ function Report() {
                         </Alert>
                     )}
 
-                    {userData.evento !== null && report && ( // Verifica se o report foi carregado antes de renderizar
+                    {userData.evento !== null && report && (
                         <Box>
                             <Header />
                             <Container component="main" maxWidth="xs">
-                                <Box
+                                <Box 
                                     sx={{
-                                        height: '100vh',
+                                        height: '100%',
                                         display: 'flex',
                                         flexDirection: 'column',
                                         justifyContent: 'center',
                                         alignItems: 'center',
+                                        pt: 10,
                                     }}
                                 >
                                     <Typography component="h1" variant="h5">
@@ -104,21 +129,45 @@ function Report() {
                                         Quantidade de Inscritos: {report.amountRegistered}
                                     </Typography>
                                     <Typography variant="h6" sx={{ mb: 3 }}>
-                                        Total Arrecadado: {report.totalCollection !== null ? `R$ ${report.totalCollection}` : "Não disponível"}
+                                        Total Arrecadado: {report.totalCollection !== null ? `R$ ${parseFloat(report.totalCollection).toFixed(2)}` : "Não disponível"}
                                     </Typography>
 
+                                    <TextField
+                                        variant="outlined"
+                                        placeholder="Buscar por nome ou cidade"
+                                        fullWidth
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                        sx={{ mb: 2 }}
+                                    />
+
                                     <Table>
-                                        <TableHead>
+                                        <TableHead className="TableHead">
                                             <TableRow>
                                                 <TableCell>Nome</TableCell>
-                                                <TableCell>Email</TableCell>
+                                                <TableCell>Cidade</TableCell>
+                                                <TableCell>Sexo</TableCell>
+                                                <TableCell>Tamanho Blusa</TableCell>
+                                                <TableCell>Contato Pessoal</TableCell>
+                                                <TableCell>Contato de Emergencia</TableCell>
+                                                <TableCell>Status do Pagamento</TableCell>
+                                                <TableCell>Tipo de Pagamento</TableCell>
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                            {report.registered.map((user, index) => (
-                                                <TableRow key={index}>
+                                            {finalData.map((user, index) => (
+                                                <TableRow 
+                                                    key={index} 
+                                                    sx={{ backgroundColor: index % 2 === 0 ? 'background.paper' : 'grey.100' }}
+                                                >
                                                     <TableCell>{user.name}</TableCell>
-                                                    <TableCell>{user.email}</TableCell>
+                                                    <TableCell>{user.city}</TableCell>
+                                                    <TableCell>{user.shirtSize}</TableCell>
+                                                    <TableCell>{user.sex}</TableCell>
+                                                    <TableCell>{user.telephone}</TableCell>
+                                                    <TableCell>{user.emergencyContact}</TableCell>
+                                                    <TableCell>{user.paymentStatus}</TableCell>
+                                                    <TableCell>{user.paymentType}</TableCell>
                                                 </TableRow>
                                             ))}
                                         </TableBody>

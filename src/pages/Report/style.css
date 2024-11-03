@@ -1,0 +1,55 @@
+/* Classe para o cabeçalho da tabela */
+.TableHead {
+    background-color: #4a90e2;   /* Cor de fundo azul */
+    color: #ffffff;              /* Cor do texto branca */
+    font-size: 16px;
+  }
+  
+  .TableHead th {
+    padding: 12px 15px;          /* Espaçamento interno */
+    font-weight: bold;
+    text-align: left;
+    border-bottom: 3px solid #306ab3; /* Borda inferior mais grossa */
+  }
+  
+  .TableHead th:first-child {
+    border-top-left-radius: 8px;     /* Bordas arredondadas na célula inicial */
+  }
+  
+  .TableHead th:last-child {
+    border-top-right-radius: 8px;    /* Bordas arredondadas na célula final */
+  }
+  
+  /* Estilos adicionais para o corpo da tabela */
+  tbody tr {
+    border-bottom: 1px solid #e0e0e0; /* Borda inferior para cada linha */
+  }
+  
+  tbody tr:hover {
+    background-color: #f3f9ff; /* Cor de fundo ao passar o mouse */
+    cursor: pointer;
+  }
+  
+  .total-arrecadado {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #4CAF50; /* Cor verde */
+    margin: 10px 0; /* Margem superior e inferior */
+    padding: 10px; /* Adiciona espaço interno */
+    background-color: #E8F5E9; /* Fundo claro */
+    border-radius: 5px; /* Bordas arredondadas */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+    width: 100%; /* Ocupa toda a largura disponível */
+    text-align: center; /* Centraliza o texto */
+}
+
+
+@media (max-width: 600px) {
+    .TableHead th {
+        font-size: 14px; /* Reduzir o tamanho da fonte em telas pequenas */
+        padding: 8px; /* Reduzir o padding */
+    }
+    tbody tr {
+        font-size: 12px; /* Reduzir o tamanho da fonte nas linhas da tabela */
+    }
+}
