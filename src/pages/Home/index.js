@@ -24,6 +24,9 @@ function Home() {
             <div id="doacoes">
                 {/*aqui vem as doações*/}
             </div>
+            <div id="localizacao">
+                {/*aqui vem as doações*/}
+            </div>
             <Footer />
         </div>
     );
