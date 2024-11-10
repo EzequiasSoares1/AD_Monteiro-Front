@@ -55,7 +55,7 @@ function PaymentPix(props) {
             
 
             handleClickSnackBar(err.response?.data || "Ocorreu um erro ao criar o pagamento");
-            handleCloseDialog();
+            handleCloseDialog("erro");
             setPaymentSuccess(false); 
             
         } finally {
@@ -139,7 +139,7 @@ function PaymentPix(props) {
                         }}
                         onClick={() => { navigate("/eventos") }}
                      >
-                        Concluir
+                       PAGO
                     </Button>
                 </Box>
                 
