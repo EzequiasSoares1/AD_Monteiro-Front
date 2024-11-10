@@ -146,8 +146,8 @@ function Report() {
                                             <TableRow>
                                                 <TableCell>Nome</TableCell>
                                                 <TableCell>Cidade</TableCell>
-                                                <TableCell>Sexo</TableCell>
                                                 <TableCell>Tamanho Blusa</TableCell>
+                                                <TableCell>Sexo</TableCell>
                                                 <TableCell>Contato Pessoal</TableCell>
                                                 <TableCell>Contato de Emergência</TableCell>
                                                 <TableCell>Status do Pagamento</TableCell>

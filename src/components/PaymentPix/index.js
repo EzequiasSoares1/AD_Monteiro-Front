@@ -5,8 +5,7 @@ import {
     Box,
     Typography,
     TextField,
-    Snackbar,
-    Alert,
+    Button,
     IconButton,
     InputAdornment,
     CircularProgress
@@ -16,26 +15,17 @@ import Api from "../../services/Api";
 import "./style.css";
 
 function PaymentPix(props) {
-    const { idEvento, nome, telefone, cidade, email, sexo, tamanho, telefoneEmergencia } = props;
+    const { idEvento, nome, telefone, cidade, email, sexo, tamanho, telefoneEmergencia, handleCloseDialog, setMensagemSnackBar, setOpenSnackBar } = props;
     const navigate = useNavigate();
 
     const [pixKey, setPixKey] = useState('');
     const [imageQRCode, setImageQRCode] = useState(null);
-    const [openSnackBar, setOpenSnackBar] = useState(false);
-    const [mensagemSnackBar, setMensagemSnackBar] = useState(null);
     const [loading, setLoading] = useState(true); // Controls the loading state
     const [paymentSuccess, setPaymentSuccess] = useState(false); // Track payment success
 
     const handleClickSnackBar = (mensagem) => {
         setMensagemSnackBar(mensagem);
         setOpenSnackBar(true);
-    };
-
-    const handleCloseSnackBar = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setOpenSnackBar(false);
     };
 
     const criarImagemQRCode = (paymentPix) => {
@@ -59,13 +49,17 @@ function PaymentPix(props) {
                 },
                 "paymentType": "PIX"
             });
-            criarImagemQRCode(response.data); // Call function to set the image and key
-            setPaymentSuccess(true); // Set payment success to true
+            criarImagemQRCode(response.data); 
+            setPaymentSuccess(true); 
         } catch (err) {
+            
+
             handleClickSnackBar(err.response?.data || "Ocorreu um erro ao criar o pagamento");
-            setPaymentSuccess(false); // Set payment success to false in case of error
+            handleCloseDialog();
+            setPaymentSuccess(false); 
+            
         } finally {
-            setLoading(false); // Disable loading after API response
+            setLoading(false); 
         }
     };
 
@@ -75,17 +69,17 @@ function PaymentPix(props) {
     };
 
     useEffect(() => {
-        createPayment(); // Call createPayment on component mount
+        createPayment(); 
     }, []);
 
     return (
         <>
             {loading ? (
                 <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
-                    <CircularProgress size={60} sx={{ marginBottom: 2 }} />
-                    <Typography variant="h6">Processando...</Typography>
+                    <CircularProgress size={60} sx={{ marginBottom: 2, padding: '5px' }} />
+                    <Typography variant="h6">  Processando...  </Typography>
                 </Box>
-            ) : paymentSuccess ? ( // Only render payment details if the payment was successful
+            ) : paymentSuccess ? ( 
                 <Box
                     sx={{
                         display: "flex",
@@ -96,18 +90,14 @@ function PaymentPix(props) {
                         width: "100%",
                     }}
                 >
-                    <Typography variant='subtitle1'>
-                        Ao realizar o pagamento via PIX, verifique seu email para confirmar
-                        o recebimento da chave pix. Qualquer dúvida, contate-nos pelo email
+                    <Typography variant='subtitle1' sx={{marginBottom: "20px" }}>
+                        Também enviamos a chave PIX para o seu e-mail. 
+                        <br />
+                        Caso tenha algum problema, você pode efetuar o pagamento por lá ou entrar em contato conosco pelo e-mail:
                     </Typography>
-                    <Box component="span" sx={{ fontWeight: 'bold', marginBottom: "30px" }} >
+                    <Box component="span" sx={{ fontWeight: 'bold', marginBottom: "20px" }} >
                         monteiroassembleiadedeus@gmail.com
                     </Box>
-
-                    <Typography variant='subtitle1' sx={{ marginBottom: "30px" }}>
-                        Que a paz do Senhor Jesus esteja convosco
-                    </Typography>
-
                     {imageQRCode && (
                         <Box
                             sx={{
@@ -140,20 +130,21 @@ function PaymentPix(props) {
                             sx={{ marginBottom: '40px' }}
                         />
                     )}
+                     <Button
+                        variant="contained"
+                        className="enviar"
+                        sx={{
+                            width: "23%",
+                            minWidth: "200px"
+                        }}
+                        onClick={() => { navigate("/eventos") }}
+                     >
+                        Concluir
+                    </Button>
                 </Box>
+                
             ) : null}
-
-            {/* Snackbar is shown only for errors */}
-            <Snackbar
-                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                open={openSnackBar}
-                autoHideDuration={7000}
-                onClose={handleCloseSnackBar}
-            >
-                <Alert severity={mensagemSnackBar === MSG_CHAVE_PIX_COPIADA ? "success" : "error"}>
-                    {mensagemSnackBar}
-                </Alert>
-            </Snackbar>
+          
         </>
     );
 }

@@ -59,7 +59,7 @@ function Header() {
                                 }
                             }}
                             sx={{
-                                border: '2px solid #3f51b5',
+                                border: '2px solid',
                                 borderRadius: '8px', 
                                 margin: '5px 5px', 
                                 padding: '6px',
@@ -105,7 +105,7 @@ function Header() {
                                 scrollToSection(item.link);
                             } else {
                                 navigate('/inicio');
-                                setTimeout(() => scrollToSection(item.link), 500); // Adjust delay as needed
+                                setTimeout(() => scrollToSection(item.link), 500);
                             }
                         }}
                         

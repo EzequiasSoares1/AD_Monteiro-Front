@@ -52,13 +52,12 @@ function FormComponent() {
     const [telefoneEmergenciaError, setTelefoneEmergenciaError] = useState(false);
     const [cidadeError, setCidadeError] = useState(false);
 
-    // Função de validação de cidade (exemplo simples)
     const handleCityBlur = () => {
-    if (cidade.trim() === '') {
-        setCidadeError(true); // Marca erro se o campo estiver vazio
-    } else {
-        setCidadeError(false); // Caso contrário, limpa o erro
-    }
+        if (cidade.trim() === '') {
+            setCidadeError(true); 
+        } else {
+            setCidadeError(false); 
+        }
     };
 
     const handleClickSnackBar = (mensagem) => {
@@ -89,10 +88,8 @@ function FormComponent() {
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
-        if (formaPagamento === "pix") {
-            navigate("/eventos")
-        }
     };
+
     const validateEmail = (email) => {
         const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         return regex.test(email);
@@ -111,7 +108,6 @@ function FormComponent() {
     };
 
     const handlePhoneBlur = (type) => {
-        // Validate the phone based on the type (either 'telefone' or 'telefoneEmergencia')
         if (type === 'telefone') {
             if (telefone && !validatePhone(telefone)) {
                 setTelefoneError(true);
@@ -401,6 +397,9 @@ function FormComponent() {
                                     sexo={sexo}
                                     tamanho={tamanhoCamisa}
                                     telefoneEmergencia={telefoneEmergencia}
+                                    handleCloseDialog={handleCloseDialog}
+                                    setOpenSnackBar={setOpenSnackBar}
+                                    setMensagemSnackBar={setMensagemSnackBar}
                                 />
                             )}
                             {formaPagamento === "cartao" && (
@@ -413,6 +412,8 @@ function FormComponent() {
                                     sexo={sexo}
                                     tamanho={tamanhoCamisa}
                                     telefoneEmergencia={telefoneEmergencia}
+                                    setOpenSnackBar={setOpenSnackBar}
+                                    setMensagemSnackBar={setMensagemSnackBar}
                                 />
                             )}
                         </DialogContent>

@@ -6,12 +6,10 @@ import Api from "../../services/Api";
 
 function PaymentBrick(props) {
 
-    const { evento, nome, telefone, cidade, email, sexo, tamanho, telefoneEmergencia } = props;
+    const { evento, nome, telefone, cidade, email, sexo, tamanho, telefoneEmergencia, handleCloseDialog, setMensagemSnackBar, setOpenSnackBar  } = props;
 
     const [preferenceID, setPreferenceID] = useState("");
-    const [loading, setLoading] = useState(false); // Adicionado estado de loading
-    const [openSnackBar, setOpenSnackBar] = useState(false);
-    const [mensagemSnackBar, setMensagemSnackBar] = useState(null);
+    const [loading, setLoading] = useState(false); 
     const paymentBrickContainer = useRef(null);
 
     const handleClickSnackBar = (mensagem) => {
@@ -51,7 +49,6 @@ function PaymentBrick(props) {
         { selectedPaymentMethod, formData }
     ) => {
         // Inicia o loading antes de chamar a API
-        setLoading(true);
 
         // callback chamado ao clicar no botão de submissão dos dados
         try {
@@ -80,13 +77,14 @@ function PaymentBrick(props) {
             setPreferenceID(response.data.id);
         } catch (err) {
             handleClickSnackBar(err.response.data);
+            handleCloseDialog();
         } finally {
             setLoading(false); // Finaliza o loading após a resposta da API
         }
     };
 
     const onError = async (error) => {
-        // callback chamado para todos os casos de erro do Brick
+        handleClickSnackBar("Verifique os dados do seu cartão");      
         console.log(error);
     };
 
@@ -99,7 +97,6 @@ function PaymentBrick(props) {
 
     return (
         <div ref={paymentBrickContainer}>
-            {/* Exibir carregamento enquanto aguardamos a resposta da API */}
             {loading && (
                 <Box
                     sx={{
@@ -108,11 +105,11 @@ function PaymentBrick(props) {
                         left: 0,
                         width: "100%",
                         height: "100%",
-                        backgroundColor: "rgba(0, 0, 0, 0.5)", // Fundo escuro semitransparente
+                        backgroundColor: "rgba(0, 0, 0, 0.5)", 
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
-                        zIndex: 9999, // Fica acima do conteúdo
+                        zIndex: 9999, 
                     }}
                 >
                     <Box sx={{ textAlign: "center", color: "white" }}>
@@ -122,7 +119,7 @@ function PaymentBrick(props) {
                 </Box>
             )}
 
-            {/* Exibir o componente Payment após a resposta da API */}
+           
             {!loading && (
                 <Payment
                     initialization={initialization}
@@ -132,17 +129,6 @@ function PaymentBrick(props) {
                     onError={onError}
                 />
             )}
-
-            <Snackbar
-                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                open={openSnackBar}
-                autoHideDuration={7000}
-                onClose={handleCloseSnackBar}
-            >
-                <Alert severity="error">
-                    {mensagemSnackBar}
-                </Alert>
-            </Snackbar>
         </div>
     );
 };
