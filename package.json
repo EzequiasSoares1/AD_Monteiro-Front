@@ -11,7 +11,6 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
-    "ad_monteiro-front": "file:",
     "axios": "^1.7.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -19,6 +18,7 @@
     "react-router-dom": "^6.24.0",
     "react-scripts": "5.0.1",
     "react-slick": "^0.30.2",
+    "serve": "^14.2.4",
     "slick-carousel": "^1.8.1",
     "web-vitals": "^2.1.0"
   },
