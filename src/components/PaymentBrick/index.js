@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Snackbar, Alert, CircularProgress, Box, Typography } from "@mui/material";
+import { Snackbar, Alert, CircularProgress, Box, Typography,Butto } from "@mui/material";
 import { Payment, StatusScreen, initMercadoPago } from '@mercadopago/sdk-react';
 import Api from "../../services/Api";
 import { useNavigate } from 'react-router-dom';
@@ -21,7 +21,7 @@ function PaymentBrick(props) {
 
     useEffect(() => {
         if (paymentBrickContainer.current) {
-            initMercadoPago('APP_USR-de87217c-7d9e-4c63-9d11-75ba42eeaab7', { locale: 'pt' });
+            initMercadoPago('APP_USR-9cd91aaf-5439-47f8-8080-6a80e952ac4c', { locale: 'pt' });
         }
        
     }, []);
@@ -66,25 +66,19 @@ function PaymentBrick(props) {
             console.log(response)
             setPreferenceID(response.data.id);
             setPaymentId(response.data.id);
-            setShowStatusScreen(true);         
-            handleCloseDialog();
-           
-
-        } catch (err) {
-            if(err.response.data){
-                handleClickSnackBar(err.response.data);
-            }
+            setShowStatusScreen(true);   
+            if (response.data.statusPayment === "approved") {
+                handleClickSnackBar("Você será redirecionado para a página principal");
             
-            if(err.response.data.id){
-                setPaymentId(err.response.data.id);
-                setShowStatusScreen(true);         
+                setTimeout(() => {
+                    navigate("/eventos");
+                }, 6000);  
             }
-
-            handleCloseDialog();
-          
-        } finally { 
-            setLoading(false); 
+               
+        } catch (err) {      
+            handleClickSnackBar(err.response?.data || "Ocorreu um erro ao criar o pagamento");
         }
+
     };
 
     const onError = async (error) => {

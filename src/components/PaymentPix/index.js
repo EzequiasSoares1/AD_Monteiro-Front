@@ -55,7 +55,7 @@ function PaymentPix(props) {
             
 
             handleClickSnackBar(err.response?.data || "Ocorreu um erro ao criar o pagamento");
-            handleCloseDialog("erro");
+            handleCloseDialog();
             setPaymentSuccess(false); 
             
         } finally {
