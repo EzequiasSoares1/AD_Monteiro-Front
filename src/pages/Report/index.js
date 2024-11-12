@@ -1,6 +1,4 @@
-import React, { useContext } from 'react';
-import { useEffect, useState } from 'react';
-
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import StoreContext from "../../store/StoreContext";
 import {
@@ -18,14 +16,13 @@ import {
     TableBody,
     CircularProgress
 } from '@mui/material';
-import { DataContext } from '../../context/DataContext';
 import Api from '../../services/Api';
 import Header from "../../components/Header";
 import "./style.css";
 
 function Report() {
     const { token } = useContext(StoreContext);
-    const { userData } = useContext(DataContext);
+    const [userData, setUserData] = useState(null);
     const [openSnackBar, setOpenSnackBar] = useState(false);
     const [mensagemSnackBar, setMensagemSnackBar] = useState(null);
     const [report, setReport] = useState(null);
@@ -45,10 +42,13 @@ function Report() {
         }
         setOpenSnackBar(false);
     };
- 
+
     useEffect(() => {
-        if (userData.evento != null) {
-            Api.getReport(userData.evento.name, token)
+        const storedEvento = JSON.parse(localStorage.getItem("evento"));
+        setUserData(storedEvento);
+
+        if (storedEvento) {
+            Api.getReport(storedEvento.name, token)
                 .then((response) => {
                     setReport(response.data);
                 })
@@ -62,17 +62,17 @@ function Report() {
             handleClickSnackBar("Nenhum evento escolhido");
             setIsLoading(false);
         }
-    }, [userData, token]);
+    }, [token]);
 
     const allData = report?.registered || [];
     const sortedAllData = allData.sort((a, b) => a.name.localeCompare(b.name));
 
-    const filteredData = sortedAllData.filter(user => 
+    const filteredData = sortedAllData.filter(user =>
         user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.city.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    const nonFilteredData = sortedAllData.filter(user => 
+    const nonFilteredData = sortedAllData.filter(user =>
         !user.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
         !user.city.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -84,35 +84,35 @@ function Report() {
             sx={{
                 display: "flex",
                 justifyContent: "center",
-                alignItems: userData.evento === null ? "center" : "flex-start",
+                alignItems: userData === null ? "center" : "flex-start",
                 minHeight: "100vh",
                 width: "100%",
             }}
         >
-             {isLoading ? (
-            <Box
-                sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: '100vh', 
-                }}
-            >
-                <CircularProgress />
-            </Box>
-        ) : (
+            {isLoading ? (
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: '100vh',
+                    }}
+                >
+                    <CircularProgress />
+                </Box>
+            ) : (
                 <>
-                    {userData.evento === null && report && (
+                    {userData === null && report && (
                         <Alert severity="success">
                             Retorne a lista de eventos e escolha um evento!
                         </Alert>
                     )}
 
-                    {userData.evento !== null && report && (
+                    {userData !== null && report && (
                         <Box>
                             <Header />
                             <Container component="main" maxWidth="xs">
-                                <Box 
+                                <Box
                                     sx={{
                                         height: '100%',
                                         display: 'flex',
@@ -123,7 +123,7 @@ function Report() {
                                     }}
                                 >
                                     <Typography component="h1" variant="h5">
-                                        Relatório Inscrição - {userData.evento.name}
+                                        Relatório Inscrição - {userData.name}
                                     </Typography>
                                     <Typography variant="h6" sx={{ mt: 2 }}>
                                         Quantidade de Inscritos: {report.amountRegistered}
@@ -146,18 +146,18 @@ function Report() {
                                             <TableRow>
                                                 <TableCell>Nome</TableCell>
                                                 <TableCell>Cidade</TableCell>
-                                                <TableCell>Sexo</TableCell>
                                                 <TableCell>Tamanho Blusa</TableCell>
+                                                <TableCell>Sexo</TableCell>
                                                 <TableCell>Contato Pessoal</TableCell>
-                                                <TableCell>Contato de Emergencia</TableCell>
+                                                <TableCell>Contato de Emergência</TableCell>
                                                 <TableCell>Status do Pagamento</TableCell>
                                                 <TableCell>Tipo de Pagamento</TableCell>
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
                                             {finalData.map((user, index) => (
-                                                <TableRow 
-                                                    key={index} 
+                                                <TableRow
+                                                    key={index}
                                                     sx={{ backgroundColor: index % 2 === 0 ? 'background.paper' : 'grey.100' }}
                                                 >
                                                     <TableCell>{user.name}</TableCell>
@@ -174,7 +174,8 @@ function Report() {
                                     </Table>
 
                                     <Button
-                                        onClick={() => navigate("/eventos")}
+                                        onClick={() => navigate("/eventos")
+                                        }
                                         fullWidth
                                         variant="contained"
                                         sx={{ mt: 3, mb: 2, width: "50%" }}

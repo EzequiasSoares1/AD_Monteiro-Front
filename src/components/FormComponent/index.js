@@ -1,4 +1,4 @@
-import { React, useState, useContext } from "react";
+import { React, useState, useContext, useEffect } from "react";
 import {
     Box,
     Typography,
@@ -12,7 +12,9 @@ import {
     DialogContent,
     DialogTitle,
     Snackbar,
-    IconButton
+    IconButton,
+    FormControl,
+    FormHelperText,
 } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -22,6 +24,8 @@ import { DataContext } from '../../context/DataContext';
 import CardEvent from "../CardEvent";
 import PaymentBrick from "../PaymentBrick";
 import PaymentPix from "../PaymentPix";
+import InputMask from "react-input-mask";
+
 
 import "./style.css"
 
@@ -43,11 +47,36 @@ function FormComponent() {
     const [scroll, setScroll] = useState('paper');
     const [openSnackBar, setOpenSnackBar] = useState(false);
     const [mensagemSnackBar, setMensagemSnackBar] = useState(null);
+    const [emailError, setEmailError] = useState(false);
+    const [telefoneError, setTelefoneError] = useState(false);
+    const [telefoneEmergenciaError, setTelefoneEmergenciaError] = useState(false);
+    const [cidadeError, setCidadeError] = useState(false);
+
+    const handleCityBlur = () => {
+        if (cidade.trim() === '') {
+            setCidadeError(true); 
+        } else {
+            setCidadeError(false); 
+        }
+    };
 
     const handleClickSnackBar = (mensagem) => {
         setMensagemSnackBar(mensagem)
         setOpenSnackBar(true);
     };
+
+    const cidadesCaririOriental = [
+        "Alcantil", "Amparo", "Assunção", "Barra de Santana", "Barra de São Miguel", "Boa Vista", 
+        "Boqueirão", "Cabaceiras", "Camalaú", "Caraúbas", "Caturité", "Congo", "Coxixola", 
+        "Gurjão", "Juazeirinho", "Livramento", "Monteiro", "Ouro Velho", "Parari", "Prata", 
+        "Riacho de Santo Antônio", "Salgadinho", "Santo André", "São Domingos do Cariri", 
+        "São João do Cariri", "São João do Tigre", "São José dos Cordeiros", 
+        "São Sebastião do Umbuzeiro", "Serra Branca", "Soledade", "Sumé", "Taperoá", "Zabelê"
+      ];
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     const handleCloseSnackBar = (event, reason) => {
         if (reason === 'clickaway') {
@@ -55,14 +84,44 @@ function FormComponent() {
         }
         setOpenSnackBar(false);
     };
+    const telefoneMask = "(99) 99999-9999"; 
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
-        if (formaPagamento === "pix") {
-            navigate("/eventos")
-        }
     };
 
+    const validateEmail = (email) => {
+        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return regex.test(email);
+    };
+    
+    const handleEmailBlur = () => {
+        if (email && !validateEmail(email)) {
+            setEmailError(true);
+        } else {
+            setEmailError(false);
+        }
+    };
+    const validatePhone = (phone) => {
+        const regex = /^\(\d{2}\)\s\d{4,5}-\d{4}$/;
+        return regex.test(phone);
+    };
+
+    const handlePhoneBlur = (type) => {
+        if (type === 'telefone') {
+            if (telefone && !validatePhone(telefone)) {
+                setTelefoneError(true);
+            } else {
+                setTelefoneError(false);
+            }
+        } else if (type === 'telefoneEmergencia') {
+            if (telefoneEmergencia && !validatePhone(telefoneEmergencia)) {
+                setTelefoneEmergenciaError(true);
+            } else {
+                setTelefoneEmergenciaError(false);
+            }
+        }
+    };
     const handleOpenDialog = () => {
 
         if (userData.evento !== null &&
@@ -121,50 +180,49 @@ function FormComponent() {
                         }}
                     >
                         <Typography variant="h5" sx={{ marginBottom: "20px" }}>
-                            Dados Inscrição
+                            Dados de Inscrição
                         </Typography>
                         <CardEvent item={userData.evento} tipo="INSCRIPTION" />
                     </Box>
-                    <Box
-                        id="id-box-form"
-                        sx={{
-                            width: { xs: "100%", md: "58%" }, // Largura responsiva
-                            textAlign: { md: "justify" }
-                        }}
-                    >
+                    <Box id="id-box-form" sx={{ width: { xs: "100%", md: "58%" }, textAlign: { md: "justify" } }}>
                         <form style={{ width: "100%" }}>
+                            <TextField required id="txNome" fullWidth variant="outlined" label="Nome Completo" value={nome} onChange={(e) => setNome(e.target.value)} />
+                            
                             <TextField
-                                required
-                                id="txNome"
-                                fullWidth
-                                variant="outlined"
-                                label="Nome Completo"
-                                value={nome}
-                                onChange={(e) => setNome(e.target.value)}
-                            ></TextField>
+                            required
+                            id="txTelefone"
+                            fullWidth
+                            variant="outlined"
+                            label="Telefone"
+                            value={telefone}
+                            sx={{ marginTop: "10px" }}
+                            onChange={(e) => setTelefone(e.target.value)}
+                            onBlur={() => handlePhoneBlur('telefone')}  // Validate only the telefone field
+                            error={telefoneError}  // Display error for telefone if invalid
+                            helperText={telefoneError ? "Telefone inválido" : ""}  // Show error message
+                            InputProps={{
+                                inputComponent: InputMask,  // Apply mask to the field
+                                inputProps: { mask: telefoneMask }  // Define mask
+                            }}
+                        />
 
-                            <TextField
-                                required
-                                id="txTelefone"
-                                fullWidth
-                                variant="outlined"
-                                label="Telefone"
-                                value={telefone}
-                                sx={{ marginTop: "10px" }}
-                                onChange={(e) => setTelefone(e.target.value)}
-                            ></TextField>
-
-                            <TextField
-                                required
-                                id="txCidade"
-                                fullWidth
-                                variant="outlined"
-                                label="Cidade"
-                                value={cidade}
-                                sx={{ marginTop: "10px" }}
-                                onChange={(e) => setCidade(e.target.value)}
-                            ></TextField>
-
+                            <FormControl fullWidth sx={{ marginTop: '10px' }} error={cidadeError}>
+                                <InputLabel id="txCidade-label">Cidade</InputLabel>
+                                <Select
+                                    labelId="txCidade-label"
+                                    id="txCidade"
+                                    value={cidade}
+                                    label="Cidade"
+                                    onChange={(e) => setCidade(e.target.value)}
+                                    onBlur={() => handleCityBlur()} // Validação ao sair do campo
+                                >
+                                    <MenuItem value="">Selecione a cidade</MenuItem>
+                                    {cidadesCaririOriental.map((cidadeNome, index) => (
+                                    <MenuItem key={index} value={cidadeNome}>{cidadeNome}</MenuItem>
+                                    ))}
+                                </Select>
+                                <FormHelperText>{cidadeError ? "Por favor, selecione uma cidade válida" : ""}</FormHelperText>
+                            </FormControl>
                             <TextField
                                 required
                                 id="txEmail"
@@ -175,19 +233,27 @@ function FormComponent() {
                                 value={email}
                                 sx={{ marginTop: "10px" }}
                                 onChange={(e) => setEmail(e.target.value)}
+                                onBlur={handleEmailBlur} // Validação ao sair do campo
+                                error={emailError} // Mostra erro se inválido
+                                helperText={emailError ? "Email inválido" : ""} // Mensagem de erro
                             ></TextField>
-
-                            <TextField
-                                required
-                                id="txTelefoneEmergencia"
-                                fullWidth
-                                variant="outlined"
-                                label="Telefone de emergência"
-                                value={telefoneEmergencia}
-                                sx={{ marginTop: "10px" }}
-                                onChange={(e) => setTelefoneEmergencia(e.target.value)}
-                            ></TextField>
-
+                          <TextField
+                            required
+                            id="txTelefoneEmergencia"
+                            fullWidth
+                            variant="outlined"
+                            label="Telefone de Emergência"
+                            value={telefoneEmergencia}
+                            sx={{ marginTop: "10px" }}
+                            onChange={(e) => setTelefoneEmergencia(e.target.value)}
+                            onBlur={() => handlePhoneBlur('telefoneEmergencia')}  // Validate only the telefoneEmergencia field
+                            error={telefoneEmergenciaError}  // Display error for telefoneEmergencia if invalid
+                            helperText={telefoneEmergenciaError ? "Telefone de emergência inválido" : ""}  // Show error message
+                            InputProps={{
+                                inputComponent: InputMask,  // Apply mask to the field
+                                inputProps: { mask: telefoneMask }  // Define mask
+                            }}
+                        />
                             <Box sx={{
                                 display: "flex",
                                 flexDirection: "row",
@@ -331,6 +397,9 @@ function FormComponent() {
                                     sexo={sexo}
                                     tamanho={tamanhoCamisa}
                                     telefoneEmergencia={telefoneEmergencia}
+                                    handleCloseDialog={handleCloseDialog}
+                                    setOpenSnackBar={setOpenSnackBar}
+                                    setMensagemSnackBar={setMensagemSnackBar}
                                 />
                             )}
                             {formaPagamento === "cartao" && (
@@ -343,6 +412,8 @@ function FormComponent() {
                                     sexo={sexo}
                                     tamanho={tamanhoCamisa}
                                     telefoneEmergencia={telefoneEmergencia}
+                                    setOpenSnackBar={setOpenSnackBar}
+                                    setMensagemSnackBar={setMensagemSnackBar}
                                 />
                             )}
                         </DialogContent>

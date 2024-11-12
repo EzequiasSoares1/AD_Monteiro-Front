@@ -1,13 +1,14 @@
 import React, { useContext } from "react";
-import { Box, Typography, AppBar, Toolbar, IconButton, Drawer, List, ListItem, ListItemButton, ListItemText } from "@mui/material";
+import { Box, AppBar, Toolbar, IconButton, Drawer, List, ListItem, ListItemButton, ListItemText, Typography } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom"; // Importando useNavigate
 import Logo from "../../assets/logo.png";
 import StoreContext from "../../store/StoreContext";
 import "./style.css";
 
 function Header() {
     const { token, setToken } = useContext(StoreContext);
+    const navigate = useNavigate(); // Hook para navegação
 
     const sair = () => {
         setToken(null);
@@ -17,9 +18,11 @@ function Header() {
     const navItems = [
         { nome: 'Início', link: 'inicio' },
         { nome: 'Nossa História', link: 'nossahistoria' },
-        { nome: 'Cultos', link: 'cultos' },
-        { nome: 'Doações', link: 'doacoes' },
-        { nome: 'Eventos', link: 'eventos' }
+        //{ nome: 'Cultos', link: 'cultos' },
+        //{ nome: 'Doações', link: 'doacoes' },
+        { nome: 'Localização', link: 'localizacao' },
+        { nome: 'Eventos', link: 'eventos' },
+       
     ];
 
     if (token !== null) {
@@ -43,7 +46,30 @@ function Header() {
             <List>
                 {navItems.map((item) => (
                     <ListItem key={item.nome} disablePadding>
-                        <ListItemButton onClick={() => item.link === 'sair' ? sair() : scrollToSection(item.link)}>
+                        <ListItemButton 
+                            onClick={() => { 
+                                handleDrawerToggle(); 
+                                if (item.link === 'sair') {
+                                    sair();
+                                } else if (item.link === 'eventos') {
+                                    navigate('/eventos');  
+                                } else {
+                                    navigate('/inicio');
+                                    scrollToSection(item.link); // Para outros itens, rolar para a seção
+                                }
+                            }}
+                            sx={{
+                                border: '2px solid',
+                                borderRadius: '8px', 
+                                margin: '5px 5px', 
+                                padding: '6px',
+                                textAlign: 'center',
+                                transition: 'background-color 0.3s ease',
+                                '&:hover': {
+                                    backgroundColor: '#f0f0f0',
+                                },
+                            }}
+                        >
                             <ListItemText primary={item.nome} />
                         </ListItemButton>
                     </ListItem>
@@ -60,22 +86,38 @@ function Header() {
                         <img src={Logo} alt="Logo Assembléia de Deus Monteiro" className="logo" />
                     </Box>
                     <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                        {navItems.map((item) => (
-                            <NavLink
-                                key={item.nome}
-                                
-                                to={["inicio", "eventos"].includes(item.link) ? `/${item.link}` : ""}
-                                underline='none'
-                                color="inherit"
-                                className='link-app-bar'
-                                onClick={() => item.link === 'sair' ? sair() : scrollToSection(item.link)}
-                            >
-                                {item.nome}
-                            </NavLink>
-                        ))}
+                    {navItems.map((item) => (
+                    <NavLink
+                        key={item.nome}
+                        to={item.link === 'sair' ? '#' : `/${item.link}`}  
+                        underline='none'
+                        color="inherit"
+                        className='link-app-bar'
+                        onClick={(e) => {
+                            e.preventDefault(); 
+                            const currentPath = window.location.pathname;
+                        
+                            if (item.link === 'sair') {
+                                sair();
+                            } else if (item.link === 'eventos') {
+                                navigate('/eventos');
+                            } else if (currentPath === '/inicio') {
+                                scrollToSection(item.link);
+                            } else {
+                                navigate('/inicio');
+                                setTimeout(() => scrollToSection(item.link), 500);
+                            }
+                        }}
+                        
+                        style={{ padding: '10px', cursor: 'pointer' }}
+                    >
+                    {item.nome}
+                </NavLink>
+                ))}
+
                     </Box>
                     <IconButton
-                        color="inherit"
+                        className="menu-icon"
                         aria-label="open drawer"
                         edge="start"
                         onClick={handleDrawerToggle}
@@ -91,7 +133,7 @@ function Header() {
                     open={mobileOpen}
                     onClose={handleDrawerToggle}
                     ModalProps={{
-                        keepMounted: true, // Better open performance on mobile.
+                        keepMounted: true,
                     }}
                     sx={{
                         display: { xs: 'block', sm: 'none' },

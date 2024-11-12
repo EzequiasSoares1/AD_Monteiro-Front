@@ -48,3 +48,20 @@ nav a {
 .css-10hburv-MuiTypography-root {
     color: black;
 }
+
+.title{
+    padding-left: 30px;
+    color: #363636cc
+}
+
+@media (max-width: 800px) {
+    .menu-icon svg {
+        color: black; /* Set the color of the MenuIcon to black */
+    }
+    .title{
+        padding-left: 0px;
+        
+    }
+   
+}
+
