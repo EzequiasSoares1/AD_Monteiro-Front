@@ -35,12 +35,16 @@ function CardEvent(props) {
         }
     }
 
-    function formatDateWithLeadingZeros(dateString) {
-        const date = new Date(dateString);
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = date.getFullYear();
-        return `${day}/${month}/${year}`;
+    function formatDateWithLeadingZeros(dateArray) {
+        if (!Array.isArray(dateArray) || dateArray.length < 3) {
+            return "Data inválida";
+        }
+      
+        const [year, month, day] = dateArray;
+        const formattedDay = String(day).padStart(2, '0');
+        const formattedMonth = String(month).padStart(2, '0');
+      
+        return `${formattedDay}/${formattedMonth}/${year}`;
     }
     
     return (
