@@ -15,6 +15,15 @@ export const getEventActive = async () => {
 
 };
 
+export const getAllEvent = async (token) => {
+    return await api.get(`/event`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+
+};
+
 export const getReport = async (nameEvent, token) => {
 
     return await api.get(`/reportsRootRestricts/${nameEvent}`, {
@@ -32,6 +41,7 @@ export const postCreatePayment = async (paymentData) => {
 export default {
     login,
     getEventActive,
+    getAllEvent,
     postCreatePayment,
     getReport,
 };

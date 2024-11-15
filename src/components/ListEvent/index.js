@@ -1,31 +1,28 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Box, Skeleton, Typography } from "@mui/material";
-
 import Api from "../../services/Api";
 import CardEvent from "../CardEvent";
 import { DataContext } from '../../context/DataContext';
-
-import "./style.css"
+import StoreContext from "../../store/StoreContext";
+import "./style.css";
 
 const ListEvent = () => {
-
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([]); // Inicializando como array vazio
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { userData, setUserData } = useContext(DataContext);
+  const { token } = useContext(StoreContext);
 
   useEffect(() => {
-
     const apiResponse = async () => {
       try {
-        const response = await Api.getEventActive();
-        setData(response.data);
+        const response = await (token === null ? Api.getEventActive() : Api.getAllEvent(token));
+        console.log(response);
+        setData(response.data || []); // Garantindo que data seja um array
         setLoading(false);
-
       } catch (error) {
         setError(error);
         setLoading(false);
-
       }
     };
 
@@ -35,10 +32,8 @@ const ListEvent = () => {
       evento: null,
       dados: null,
       pagamento: null
-    })
-
-  }, []);
-
+    });
+  }, [token, setUserData]);
 
   return (
     <Box className="main">
@@ -46,17 +41,16 @@ const ListEvent = () => {
         <Typography variant="h3">Eventos</Typography>
       </Box>
       <Box className="listview">
-
-        {loading ? <Skeleton width={288} height={350} /> : data.map((item) => (
-          <CardEvent key={item.id} item={item} tipo="LIST" />
-        ))}
+        {loading ? (
+          <Skeleton width={288} height={350} />
+        ) : (
+          Array.isArray(data) && data.map((item) => (
+            <CardEvent key={item.id} item={item} tipo="LIST" />
+          ))
+        )}
       </Box>
     </Box>
   );
-}
+};
 
-
-
-
-
-export default ListEvent;           
+export default ListEvent;

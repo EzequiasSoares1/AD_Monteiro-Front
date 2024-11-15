@@ -126,8 +126,9 @@ function Report() {
                                         Relatório Inscrição - {userData.name}
                                     </Typography>
                                     <Typography variant="h6" sx={{ mt: 2 }}>
-                                        Quantidade de Inscritos: {report.amountRegistered}
+                                        Inscrições Concluídas: {report.amountRegistered !== null ? report.amountRegistered : 0} 
                                     </Typography>
+                            
                                     <Typography variant="h6" sx={{ mb: 3 }}>
                                         Total Arrecadado: {report.totalCollection !== null ? `R$ ${parseFloat(report.totalCollection).toFixed(2)}` : "Não disponível"}
                                     </Typography>
