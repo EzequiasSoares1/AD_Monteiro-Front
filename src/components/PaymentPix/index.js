@@ -20,9 +20,9 @@ function PaymentPix(props) {
 
     const [pixKey, setPixKey] = useState('');
     const [imageQRCode, setImageQRCode] = useState(null);
-    const [loading, setLoading] = useState(true); // Controls the loading state
-    const [paymentSuccess, setPaymentSuccess] = useState(false); // Track payment success
-
+    const [loading, setLoading] = useState(true); 
+    const [paymentSuccess, setPaymentSuccess] = useState(false);
+    
     const handleClickSnackBar = (mensagem) => {
         setMensagemSnackBar(mensagem);
         setOpenSnackBar(true);

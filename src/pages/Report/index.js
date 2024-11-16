@@ -126,7 +126,7 @@ function Report() {
                                         Relatório Inscrição - {userData.name}
                                     </Typography>
                                     <Typography variant="h6" sx={{ mt: 2 }}>
-                                        Inscrições Concluídas: {report.amountRegistered !== null ? report.amountRegistered : 0} 
+                                        Inscrições Concluídas: {report.amountRegisteredApproved !== null ? report.amountRegisteredApproved : 0} 
                                     </Typography>
                             
                                     <Typography variant="h6" sx={{ mb: 3 }}>

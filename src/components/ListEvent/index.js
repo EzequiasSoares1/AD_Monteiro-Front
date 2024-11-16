@@ -17,7 +17,6 @@ const ListEvent = () => {
     const apiResponse = async () => {
       try {
         const response = await (token === null ? Api.getEventActive() : Api.getAllEvent(token));
-        console.log(response);
         setData(response.data || []); // Garantindo que data seja um array
         setLoading(false);
       } catch (error) {
