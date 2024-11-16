@@ -36,7 +36,7 @@ function CardEvent(props) {
     }
 
     function formatDateWithLeadingZeros(dateArray) {
-        if (!Array.isArray(dateArray) || dateArray.length < 3) {
+        /*if (!Array.isArray(dateArray) || dateArray.length < 3) {
             return "Data inválida";
         }
       
@@ -44,6 +44,23 @@ function CardEvent(props) {
         const formattedDay = String(day).padStart(2, '0');
         const formattedMonth = String(month).padStart(2, '0');
       
+        return `${formattedDay}/${formattedMonth}/${year}`;*/
+        if (!Array.isArray(dateArray) || dateArray.length < 3) {
+            return "Data inválida";
+        }
+    
+        const [year, month, day] = dateArray;
+    
+        // Garantir que a data seja formatada corretamente de acordo com a localidade do usuário
+        const date = new Date(year, month - 1, day);  // Meses começam do 0 em JavaScript
+    
+        // Formatar a data para DD/MM/YYYY, usando a localidade do usuário
+        const formattedDay = String(day).padStart(2, '0');
+        const formattedMonth = String(month).padStart(2, '0');
+        
+        // Utilizando a formatação de data nativa do JavaScript para garantir compatibilidade entre plataformas
+        const formattedDate = new Intl.DateTimeFormat('pt-BR').format(date); 
+    
         return `${formattedDay}/${formattedMonth}/${year}`;
     }
     
@@ -195,7 +212,7 @@ function CardEvent(props) {
                     color: 'primary.main', // Usando a cor principal do tema para destacar o valor
                 }}
             >
-                 {item.value} R$
+                 R$ {item.value} 
             </Box>
         </Box>
 
