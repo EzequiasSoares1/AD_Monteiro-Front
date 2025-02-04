@@ -1,97 +1,121 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Snackbar, Alert, CircularProgress, Box, Typography,Butto } from "@mui/material";
-import { Payment, StatusScreen, initMercadoPago } from '@mercadopago/sdk-react';
+import React, { useEffect, useState } from "react";
+import { Snackbar, Alert, CircularProgress, Box, Typography } from "@mui/material";
+import { useMercadopago } from "react-sdk-mercadopago";
 import Api from "../../services/Api";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
-function PaymentBrick(props) {
+function PaymentBrickv2(props) {
     const { evento, nome, telefone, cidade, email, sexo, tamanho, telefoneEmergencia, handleCloseDialog, setMensagemSnackBar, setOpenSnackBar } = props;
     const navigate = useNavigate();
 
     const [preferenceID, setPreferenceID] = useState("");
     const [paymentId, setPaymentId] = useState("");
     const [loading, setLoading] = useState(false);
-    const [showStatusScreen, setShowStatusScreen] = useState(false); 
-    const paymentBrickContainer = useRef(null);
+    const [showStatusScreen, setShowStatusScreen] = useState(false);
 
     const handleClickSnackBar = (mensagem) => {
         setMensagemSnackBar(mensagem);
         setOpenSnackBar(true);
     };
 
+    // Inicializa o SDK do Mercado Pago
+    const mercadopago = useMercadopago.v2("APP_USR-9cd91aaf-5439-47f8-8080-6a80e952ac4c", { locale: "pt-BR" });
+
     useEffect(() => {
-        if (paymentBrickContainer.current) {
-            initMercadoPago('APP_USR-9cd91aaf-5439-47f8-8080-6a80e952ac4c', { locale: 'pt' });
-        }
-       
-    }, []);
+        const fetchPreference = async () => {
+            try {
+                const response = await Api.postCreatePreference({
+                    id: evento.id,
+                    title: evento.name,
+                    quantity: 1,
+                    price: evento.value,
+                });
 
-    const initialization = {
-        amount: evento.value,
-        preferenceID: preferenceID,
-    };
-
-    const customization = {
-        paymentMethods: {
-            creditCard: 'all',
-            selectInstallments: "all",
-            maxInstallments: 12
-        },
-    };
-
-    const onSubmit = async ({ selectedPaymentMethod, formData }) => {
-        try {
-            const response = await Api.postCreatePayment({
-                "registered": {
-                    "name": nome,
-                    "telephone": telefone,
-                    "city": cidade,
-                    "emergencyContact": telefoneEmergencia,
-                    "email": email,
-                    "sex": sexo,
-                    "shirtSize": tamanho,
-                    "registrationStatus": "CONCLUDED",
-                    "event_id": evento.id
-                },
-                "paymentType": "CARD",
-                "cardTransationDTO": {
-                    "token": formData.token,
-                    "issuerId": formData.issuer_id,
-                    "paymentMethodId": formData.payment_method_id,
-                    "installments": formData.installments,
-                    "CPFHolder": formData.payer.identification.number,
-                    "email": formData.payer.email
-                }
-            });
-            console.log(response)
-            setPreferenceID(response.data.id);
-            setPaymentId(response.data.id);
-            setShowStatusScreen(true);   
-            if (response.data.statusPayment === "approved") {
-                handleClickSnackBar("Você será redirecionado para a página principal");
-            
-                setTimeout(() => {
-                    navigate("/eventos");
-                }, 6000);  
+                setPreferenceID(response.data.id);
+            } catch (error) {
+                handleClickSnackBar("Erro ao criar preferência de pagamento");
             }
-               
-        } catch (err) {      
-            handleClickSnackBar(err.response?.data || "Ocorreu um erro ao criar o pagamento");
+        };
+
+        fetchPreference();
+    }, [evento]);
+
+    useEffect(() => {
+        if (mercadopago && preferenceID) {
+            const bricksBuilder = mercadopago.bricks();
+
+            bricksBuilder.create("payment", "payment-brick-container", {
+                initialization: {
+                    amount: evento.value,
+                    preferenceId: preferenceID,
+                },
+                customization: {
+                    paymentMethods: {
+                        creditCard: "all",
+                        selectInstallments: "all",
+                        maxInstallments: 12,
+                    },
+                },
+                callbacks: {
+                    onReady: (e) => console.log("Brick pronto!: ",e),
+                    onSubmit: async ({ formData }) => {
+                        console.log(formData)
+                        try {
+                            setLoading(true);
+                            const response = await Api.postCreatePayment({
+                                registered: {
+                                    name: nome,
+                                    telephone: telefone,
+                                    city: cidade,
+                                    emergencyContact: telefoneEmergencia,
+                                    email: email,
+                                    sex: sexo,
+                                    shirtSize: tamanho,
+                                    registrationStatus: "CONCLUDED",
+                                    event_id: evento.id,
+                                },
+                                paymentType: "CARD",
+                                cardTransationDTO: {
+                                    token: formData.token,
+                                    issuerId: formData.issuer_id,
+                                    paymentMethodId: formData.payment_method_id,
+                                    installments: formData.installments,
+                                    CPFHolder: formData.payer.identification.number,
+                                    email: formData.payer.email,
+                                    firstName: nome
+                                },
+                            });
+
+                            setLoading(false);
+                            setPaymentId(response.data.id);
+                            setShowStatusScreen(true);
+
+                            if (response.data.statusPayment === "approved") {
+                                handleClickSnackBar("PAGAMENTO CONCLUIDO COM SUCESSO!!");
+                                setTimeout(() => {
+                                    navigate("/eventos");
+                                }, 4000);
+                            }
+                            else{
+                                handleClickSnackBar("OCORREU UM ERRO COM O PAGAMENTO, VERIFIQUE OS DADOS DO CARTÃO");
+                            }    
+                        } catch (err) {
+                            setLoading(false);
+                            console.log(err.response);
+                            handleClickSnackBar(err.response?.data || "Ocorreu um erro ao criar o pagamento");
+                        }
+                    },
+                    onError: (error) => {
+                        handleClickSnackBar("OCORREU UM ERRO COM O PAGAMENTO, VERIFIQUE OS DADOS DO CARTÃO");
+                        console.error(error);
+                    },
+                },
+            });
         }
-
-    };
-
-    const onError = async (error) => {
-        handleClickSnackBar("Verifique os dados do seu cartão");
-        console.log(error);
-    };
-
-    const onReady = async () => {
-        // Callback chamado quando o Brick estiver pronto.
-    };
+    }, [mercadopago, preferenceID]);
 
     return (
-        <div ref={paymentBrickContainer}>
+        <div>
             {loading && (
                 <Box
                     sx={{
@@ -116,28 +140,17 @@ function PaymentBrick(props) {
 
             {!showStatusScreen && (
                 <Box>
-                    <Payment
-                        initialization={initialization}
-                        customization={customization}
-                        onSubmit={onSubmit}
-                        onReady={onReady}
-                        onError={onError}
-                    />
+                    <div id="payment-brick-container" />
                 </Box>
             )}
 
             {showStatusScreen && (
                 <Box>
-                    <StatusScreen
-                        initialization={{ paymentId: paymentId }}
-                        onReady={onReady}
-                        onError={onError}
-                    />
+                    <div id="status-screen-brick-container" />
                 </Box>
-                
             )}
         </div>
     );
-};
+}
 
-export default PaymentBrick;
+export default PaymentBrickv2;
